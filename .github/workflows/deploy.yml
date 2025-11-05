@@ -53,13 +53,13 @@ jobs:
           git fetch origin || echo "⚠️  git fetch failed (might need sudo or different permissions)"
           git pull origin main || git pull origin master || echo "⚠️  git pull failed (might need sudo or different permissions)"
           
-          # Rebuild and restart containers
+          # Rebuild and restart containers (using sudo since bonnades user needs docker permissions)
           echo "🐳 Rebuilding and restarting containers..."
-          docker compose down
-          docker compose build --no-cache
-          docker compose up -d
+          sudo docker compose down
+          sudo docker compose build --no-cache
+          sudo docker compose up -d
           
           # Show container status
           echo "✅ Deployment complete. Container status:"
-          docker compose ps
+          sudo docker compose ps
 
