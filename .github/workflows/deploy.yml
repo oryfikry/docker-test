@@ -33,13 +33,25 @@ jobs:
           fi
           
           echo "📁 Using project directory: $PROJECT_PATH"
+          echo "👤 Running as user: $(whoami)"
+          echo "📂 Current directory before cd: $(pwd)"
+          
           cd "$PROJECT_PATH"
-          pwd
+          echo "📂 Current directory after cd: $(pwd)"
+          
+          # Check permissions
+          echo "🔍 Checking directory permissions..."
+          ls -la | head -5
+          
+          # Check if git repo exists
+          if [ ! -d ".git" ]; then
+            echo "⚠️  Warning: .git directory not found. This might be expected if using a different setup."
+          fi
           
           # Pull latest code
           echo "📥 Pulling latest code..."
-          git fetch origin
-          git pull origin main || git pull origin master
+          git fetch origin || echo "⚠️  git fetch failed (might need sudo or different permissions)"
+          git pull origin main || git pull origin master || echo "⚠️  git pull failed (might need sudo or different permissions)"
           
           # Rebuild and restart containers
           echo "🐳 Rebuilding and restarting containers..."
