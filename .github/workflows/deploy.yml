@@ -18,21 +18,36 @@ jobs:
           # Navigate to your project directory on the VM
           # Set SERVER_PATH secret to your project path (e.g., /home/ubuntu/docker-test)
           PROJECT_PATH="${{ secrets.SERVER_PATH }}"
+          
           if [ -z "$PROJECT_PATH" ]; then
-            echo "Error: SERVER_PATH secret must be set"
+            echo "❌ Error: SERVER_PATH secret is not set in GitHub Secrets"
+            echo "Please set it in: Repository Settings → Secrets and variables → Actions"
+            echo "Example value: /home/ubuntu/docker-test"
             exit 1
           fi
+          
+          if [ ! -d "$PROJECT_PATH" ]; then
+            echo "❌ Error: Directory does not exist: $PROJECT_PATH"
+            echo "Please check that the SERVER_PATH secret points to the correct directory"
+            exit 1
+          fi
+          
+          echo "📁 Using project directory: $PROJECT_PATH"
           cd "$PROJECT_PATH"
+          pwd
           
           # Pull latest code
+          echo "📥 Pulling latest code..."
           git fetch origin
           git pull origin main || git pull origin master
           
           # Rebuild and restart containers
+          echo "🐳 Rebuilding and restarting containers..."
           docker compose down
           docker compose build --no-cache
           docker compose up -d
           
           # Show container status
+          echo "✅ Deployment complete. Container status:"
           docker compose ps
 
