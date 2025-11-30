@@ -85,11 +85,25 @@ sudo ufw reload
 
 **Note:** Only open port 3306 if you need external MySQL access. For security, it's better to keep it closed and access MySQL only from within Docker network.
 
-## Step 4: Build and Start Services
+## Step 4: Verify Files and Build Services
 
 ### Navigate to project directory
 ```bash
 cd ~/docker-test  # or wherever you placed the project
+```
+
+### Verify all required files are present (optional but recommended)
+```bash
+# Make verification script executable
+chmod +x verify-files.sh
+./verify-files.sh
+```
+
+Or manually check:
+```bash
+ls -la service1/Dockerfile service1/package.json service1/index.js
+ls -la service2/Dockerfile service2/package.json service2/index.js
+ls -la docker-compose.yml
 ```
 
 ### Build and start all services
@@ -183,6 +197,17 @@ sudo docker compose logs
 
 # Check if ports are already in use
 sudo netstat -tulpn | grep -E '3001|3002|3306'
+```
+
+### "Dockerfile: no such file or directory" error
+This usually means files weren't transferred correctly. Verify:
+```bash
+# Check if Dockerfiles exist and are not empty
+ls -lh service1/Dockerfile service2/Dockerfile
+cat service1/Dockerfile  # Should show content, not be empty
+
+# If files are missing, re-transfer the project
+# Make sure to preserve directory structure when transferring
 ```
 
 ### MySQL connection issues
