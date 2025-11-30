@@ -52,7 +52,7 @@ services:
     environment:
       DB_HOST: mysql
       DB_USER: appuser
-      DB_PASS: apppass
+      DB_PASSWORD: apppass
       DB_NAME: appdb
     ports:
       - "3002:3002"

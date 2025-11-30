@@ -3,9 +3,9 @@ import mysql from "mysql2/promise";
 
 const dbConfig = {
   host: process.env.DB_HOST || "mysql",
-  user: "appuser",
-  password: "apppass",
-  database: "appdb",
+  user: process.env.DB_USER || "appuser",
+  password: process.env.DB_PASSWORD || "apppass",
+  database: process.env.DB_NAME || "appdb",
   port: 3306,
 };
 
